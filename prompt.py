@@ -40,8 +40,8 @@ def character_card_generation(context: str):
     """)
 
 
-with open("context/chromia.txt", "r") as file:
-    chromia_txt = file.read()
+with open("context/context.txt", "r") as file:
+    context_txt = file.read()
 
 class Notetaker:
     def __init__(self):
@@ -66,7 +66,7 @@ class Notetaker:
 def simulate_conversation(goal: str, char1, char2, turns=5):
     conversation = []
     current_speaker = char1
-    last_response = f"Let's discuss: {goal}.\n{chromia_txt}"
+    last_response = f"Let's discuss: {goal}.\n{context_txt}"
     notetaker = Notetaker()
 
     print(f"\n[Conversation: {char1['name']} and {char2['name']} discuss {goal}]\n")
