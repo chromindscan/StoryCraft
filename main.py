@@ -16,12 +16,13 @@ config = load_config()
 character1 = config["characters"]["adam"]
 character2 = config["characters"]["eve"]
 goal = config["goals"]["chromia_character"]
+turns = config["turns"]
 
 simulate_conversation(
     goal=goal,
     char1=character1,
     char2=character2,
-    turns=3
+    turns=turns
 )
 
 
