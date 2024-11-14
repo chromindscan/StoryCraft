@@ -3,15 +3,14 @@ import os
 import dspy
 
 class XAILanguageModel(dspy.LM):
-    def __init__(self, base_url, api_key):
+    def __init__(self, model, api_base, api_key):
         super().__init__(
-            model="xai/grok-beta",
-            api_base=base_url,
+            model=model,
+            api_base=api_base,
             api_key=api_key
         )
 
     def __call__(self, *args, **kwargs):
-
         kwargs.pop('response_format', None)
         return super().__call__(*args, **kwargs)
 
@@ -23,15 +22,18 @@ def get_lm_provider(provider="openai"):
             api_key=os.getenv("OPENAI_API_KEY")
         ),
         "xai": XAILanguageModel(
-            base_url="https://api.x.ai/v1",
+            model="xai/grok-beta",
+            api_base="https://api.x.ai/v1",
             api_key=os.getenv("XAI_API_KEY")
         ),
-        "chromind": XAILanguageModel(
-            base_url="https://api.chromind.ai/v1", 
-            api_key=os.getenv("CHROMINDSCAN_API_KEY")
+        "chromindscan": dspy.LM(
+            model="openai/grok-beta",
+            api_base="https://api.chromindscan.com/v1",
+            api_key=os.getenv("CHROMINDSCAN_API_KEY"),
+            provider="chromindscan"
         )
     }
     return providers.get(provider)
 
-lm = get_lm_provider("xai")
+lm = get_lm_provider("chromindscan")
 dspy.configure(lm=lm)
