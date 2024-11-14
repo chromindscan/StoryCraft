@@ -1,22 +1,19 @@
+
 import os
 import dspy
 
-def get_lm_provider(provider="openai"):
-    providers = {
-        "openai": dspy.LM(
-            model="openai/gpt-4o-mini",
-            provider="openai",
-            api_key=os.getenv("OPENAI_API_KEY")
-        ),
-        "xai": dspy.LM(
+class XAILanguageModel(dspy.LM):
+    def __init__(self):
+        super().__init__(
             model="xai/grok-beta",
-            provider="xai", 
             api_base="https://api.x.ai/v1",
             api_key=os.getenv("XAI_API_KEY")
         )
-    }
-    return providers.get(provider)
 
-lm = get_lm_provider(provider="openai")
+    def __call__(self, *args, **kwargs):
 
+        kwargs.pop('response_format', None)
+        return super().__call__(*args, **kwargs)
+
+lm = XAILanguageModel()
 dspy.configure(lm=lm)
