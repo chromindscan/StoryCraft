@@ -1,5 +1,6 @@
 CHARACTER_CARD_SCHEMA = {
     "title": "str",
+    "name": "str",
     "headings": "list[str]",
     "entities_and_metadata": "list[dict[str, str]]",
     "bio": "list[str]",
