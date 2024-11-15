@@ -4,7 +4,7 @@ from schema import CHARACTER_CARD_SCHEMA
 
 def character_card_generation(context: str):
     """
-    Generates a detailed character card from provided context using a chain-of-thought approach.
+    Generates a detailed character card from provided context.
     
     Args:
         context (str): Raw context data about the character
@@ -51,7 +51,7 @@ class Notetaker:
         prompt = (
             f"As a storyteller, based on the following message by {speaker}, "
             
-            f"continue developing the character's backstory:\n\n"
+            f"Continue developing the character's backstory:\n\n"
             
             f"Message:\n{message}\n\n"
             
@@ -68,6 +68,8 @@ def simulate_conversation(goal: str, char1, char2, turns=5):
     current_speaker = char1
     last_response = f"Let's discuss: {goal}.\n{context_txt}"
     notetaker = Notetaker()
+    
+    import json
 
     print(f"\n[Conversation: {char1['name']} and {char2['name']} discuss {goal}]\n")
 
@@ -89,8 +91,12 @@ def simulate_conversation(goal: str, char1, char2, turns=5):
         for entry in conversation:
             f.write(f"{entry['speaker']}: {entry['text']}\n")
 
-    with open("character_card.txt", "w") as f:
-        f.write(str(character_card))
+    with open("character_card.json", "w") as f:
+        character_card_dict = {
+            field: getattr(character_card, field)
+            for field in CHARACTER_CARD_SCHEMA.keys()
+        }
+        json.dump(character_card_dict, f, indent=2)
 
     with open("scratchpad.txt", "w") as f:
         f.write(full_story)
